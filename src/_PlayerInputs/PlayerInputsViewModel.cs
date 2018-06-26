@@ -7,6 +7,8 @@ using System.Collections.Generic;
 using System.Windows;
 using System.Collections.ObjectModel;
 using System.Linq;
+using Dynamo.Controls;
+using System.Windows.Controls;
 
 namespace Monito
 {
@@ -100,6 +102,46 @@ namespace Monito
                     }
                 }
                 RaisePropertyChanged(nameof(CurrentInputs));
+            }
+        }
+
+        private string highlightGUID;
+        /// <summary>
+        /// The GUID of the node that should be highlighted
+        /// </summary>
+        public string HighlightGUID
+        {
+            get
+            {
+                return highlightGUID;
+            }
+            set
+            {
+                highlightGUID = value;
+                foreach (var nv in dynWindow.FindVisualChildren<NodeView>())
+                {
+                    NodeModel node = nv.DataContext as NodeModel;
+                    if (node.GUID.ToString() == value)
+                    {
+                        MessageBox.Show(node.NickName);
+                    }
+                }
+            }
+        }
+
+        private string unhighlightGUID;
+        /// <summary>
+        /// The GUID of the node that should no longer be highlighted
+        /// </summary>
+        public string UnhighlightGUID
+        {
+            get
+            {
+                return unhighlightGUID;
+            }
+            set
+            {
+                unhighlightGUID = value;
             }
         }
 

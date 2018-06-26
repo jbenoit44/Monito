@@ -33,5 +33,15 @@ namespace Monito
         {
             clickedGUID.Text = "" + ((Button)sender).Tag;
         }
+
+        void button_MouseEnter(object sender, RoutedEventArgs e)
+        {
+            highlightNode.Text = "" + ((Button)sender).Tag;
+        }
+
+        void button_MouseLeave(object sender, RoutedEventArgs e)
+        {
+            unhighlightNode.Text = "" + ((Button)sender).Tag;
+        }
     }
 }

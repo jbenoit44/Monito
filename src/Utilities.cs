@@ -1,8 +1,11 @@
 ﻿using Dynamo.Extensions;
+using Dynamo.Graph.Nodes;
 using Dynamo.ViewModels;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
+using System.Windows.Media;
 
 namespace Monito
 {
@@ -114,6 +117,42 @@ namespace Monito
         public string Details
         {
             get { return objectDetails; }
+        }
+    }
+
+    public static class WPFextensions
+    {
+        // https://stackoverflow.com/questions/10279092/how-to-get-children-of-a-wpf-container-by-type
+        public static T GetChildOfType<T>(this DependencyObject depObj) where T : DependencyObject
+        {
+            if (depObj == null) return null;
+            for (int i = 0; i < VisualTreeHelper.GetChildrenCount(depObj); i++)
+            {
+                var child = VisualTreeHelper.GetChild(depObj, i);
+
+                var result = (child as T) ?? GetChildOfType<T>(child);
+                if (result != null) return result;
+            }
+            return null;
+        }
+        // https://stackoverflow.com/questions/974598/find-all-controls-in-wpf-window-by-type/978352
+        public static IEnumerable<T> FindVisualChildren<T>(this DependencyObject depObj) where T : DependencyObject
+        {
+            if (depObj != null)
+            {
+                for (int i = 0; i < VisualTreeHelper.GetChildrenCount(depObj); i++)
+                {
+                    DependencyObject child = VisualTreeHelper.GetChild(depObj, i);
+                    if (child != null && child is T)
+                    {
+                        yield return (T)child;
+                    }
+                    foreach (T childOfChild in FindVisualChildren<T>(child))
+                    {
+                        yield return childOfChild;
+                    }
+                }
+            }
         }
     }
 }
