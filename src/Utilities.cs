@@ -31,21 +31,29 @@ namespace Monito
             bool isAnno = viewModel.Model.CurrentWorkspace.Annotations.Count(x => x.GUID.ToString() == guid) > 0;
             double objectCenterX = 0;
             double objectCenterY = 0;
+            double objectWidth = 0;
+            double objectHeight = 0;
             if (isNode)
             {
                 var zoomNode = readyParams.CurrentWorkspaceModel.Nodes.First(x => x.GUID.ToString() == guid);
                 objectCenterX = zoomNode.CenterX;
                 objectCenterY = zoomNode.CenterY;
+                objectWidth = zoomNode.Rect.TopRight.X - zoomNode.Rect.BottomLeft.X;
+                objectHeight = zoomNode.Rect.TopRight.Y - zoomNode.Rect.BottomLeft.Y;
             }
             else if (isNote)
             {
                 var zoomNote = viewModel.Model.CurrentWorkspace.Notes.First(x => x.GUID.ToString() == guid);
+                objectWidth = zoomNote.Rect.TopRight.X - zoomNote.Rect.BottomLeft.X;
+                objectHeight = zoomNote.Rect.TopRight.Y - zoomNote.Rect.BottomLeft.Y;
                 objectCenterX = zoomNote.CenterX;
                 objectCenterY = zoomNote.CenterY;
             }
             else if (isAnno)
             {
                 var zoomAnno = viewModel.Model.CurrentWorkspace.Annotations.First(x => x.GUID.ToString() == guid);
+                objectWidth = zoomAnno.Rect.TopRight.X - zoomAnno.Rect.BottomLeft.X;
+                objectHeight = zoomAnno.Rect.TopRight.Y - zoomAnno.Rect.BottomLeft.Y;
                 objectCenterX = zoomAnno.CenterX;
                 objectCenterY = zoomAnno.CenterY;
             }
@@ -55,10 +63,7 @@ namespace Monito
             viewModel.CurrentSpace.Zoom = maxZoom;
             viewModel.CurrentSpace.X = corrX;
             viewModel.CurrentSpace.Y = corrY;
-            if (objectCenterX != 0 || objectCenterY !=0)
-            {
-                viewModel.ZoomInCommand.Execute(null);
-            }           
+            if (objectCenterX != 0 || objectCenterY != 0) { viewModel.ZoomInCommand.Execute(null); }           
         }
     }
 
@@ -70,10 +75,7 @@ namespace Monito
         public static string Abbreviate(this String str)
         {
             str = str.Replace(Environment.NewLine, " ");
-            if (str.Length > 60)
-            {
-                str = str.Substring(0, 60) + "...";
-            }
+            if (str.Length > 60) { str = str.Substring(0, 60) + "..."; }
             return str;
         }
     }
