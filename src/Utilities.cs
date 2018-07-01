@@ -58,8 +58,8 @@ namespace Monito
                 objectCenterY = zoomAnno.CenterY;
             }
             var maxZoom = 4d;
-            var corrX = -objectCenterX * maxZoom + dynWindow.ActualWidth / 2.2;
-            var corrY = -objectCenterY * maxZoom + dynWindow.ActualHeight / 2.2;
+            var corrX = -objectCenterX * maxZoom + dynWindow.ActualWidth / (maxZoom / 2) * 1.1;
+            var corrY = -objectCenterY * maxZoom + dynWindow.ActualHeight / (maxZoom / 2) * 1.1;
             viewModel.CurrentSpace.Zoom = maxZoom;
             viewModel.CurrentSpace.X = corrX;
             viewModel.CurrentSpace.Y = corrY;
