@@ -36,16 +36,16 @@ namespace Monito
             if (isNode)
             {
                 var zoomNode = readyParams.CurrentWorkspaceModel.Nodes.First(x => x.GUID.ToString() == guid);
+                objectWidth = zoomNode.Rect.TopRight.X - zoomNode.Rect.BottomLeft.X;
+                objectHeight = Math.Abs(zoomNode.Rect.TopRight.Y - zoomNode.Rect.BottomLeft.Y);
                 objectCenterX = zoomNode.CenterX;
                 objectCenterY = zoomNode.CenterY;
-                objectWidth = zoomNode.Rect.TopRight.X - zoomNode.Rect.BottomLeft.X;
-                objectHeight = zoomNode.Rect.TopRight.Y - zoomNode.Rect.BottomLeft.Y;
             }
             else if (isNote)
             {
                 var zoomNote = viewModel.Model.CurrentWorkspace.Notes.First(x => x.GUID.ToString() == guid);
                 objectWidth = zoomNote.Rect.TopRight.X - zoomNote.Rect.BottomLeft.X;
-                objectHeight = zoomNote.Rect.TopRight.Y - zoomNote.Rect.BottomLeft.Y;
+                objectHeight = Math.Abs(zoomNote.Rect.TopRight.Y - zoomNote.Rect.BottomLeft.Y);
                 objectCenterX = zoomNote.CenterX;
                 objectCenterY = zoomNote.CenterY;
             }
@@ -53,14 +53,36 @@ namespace Monito
             {
                 var zoomAnno = viewModel.Model.CurrentWorkspace.Annotations.First(x => x.GUID.ToString() == guid);
                 objectWidth = zoomAnno.Rect.TopRight.X - zoomAnno.Rect.BottomLeft.X;
-                objectHeight = zoomAnno.Rect.TopRight.Y - zoomAnno.Rect.BottomLeft.Y;
+                objectHeight = Math.Abs(zoomAnno.Rect.TopRight.Y - zoomAnno.Rect.BottomLeft.Y);
                 objectCenterX = zoomAnno.CenterX;
                 objectCenterY = zoomAnno.CenterY;
             }
             var maxZoom = 4d;
-            var corrX = -objectCenterX * maxZoom + dynWindow.ActualWidth / (maxZoom / 2) * 1.1;
-            var corrY = -objectCenterY * maxZoom + dynWindow.ActualHeight / (maxZoom / 2) * 1.1;
-            viewModel.CurrentSpace.Zoom = maxZoom;
+            var minZoom = 0.5;
+            var topBar = 110;
+            var bottomBar = 50;
+            var newZoom = maxZoom;
+            var canvasWidth = dynWindow.ActualWidth - viewModel.LibraryWidth;
+            var canvasHeight = dynWindow.ActualHeight - viewModel.ConsoleHeight - topBar - bottomBar;
+            var lowestRatio = 0.9 * Math.Min(canvasWidth / objectWidth, canvasHeight / objectHeight);
+            if (lowestRatio > maxZoom) { newZoom = maxZoom; }
+            else if (lowestRatio < minZoom) { newZoom = minZoom; }
+            else { newZoom = lowestRatio; }
+            var corrX = -objectCenterX * newZoom + dynWindow.ActualWidth / (newZoom / 2);
+            var corrY = -objectCenterY * newZoom + dynWindow.ActualHeight / (newZoom / 2);
+            MessageBox.Show("Width: " + objectWidth.ToString() 
+                + "\nHeight: " + objectHeight.ToString() 
+                + "\nWindow width: " + dynWindow.ActualWidth.ToString() 
+                + "\nLibary width: " + viewModel.LibraryWidth.ToString() 
+                + "\nWindow height: " + dynWindow.ActualHeight.ToString()
+                + "\nObject X: " + objectCenterX.ToString()
+                + "\nObject Y: " + objectCenterY.ToString()
+                + "\nCurrent X: " + viewModel.CurrentSpace.X.ToString()
+                + "\nCurrent Y: " + viewModel.CurrentSpace.Y.ToString()
+                + "\nNew X: " + corrX.ToString()
+                + "\nNew Y: " + corrY.ToString()
+                + "\nZoom: " + newZoom.ToString());
+            viewModel.CurrentSpace.Zoom = newZoom;
             viewModel.CurrentSpace.X = corrX;
             viewModel.CurrentSpace.Y = corrY;
             if (objectCenterX != 0 || objectCenterY != 0) { viewModel.ZoomInCommand.Execute(null); }           
