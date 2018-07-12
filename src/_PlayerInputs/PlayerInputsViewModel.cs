@@ -4,11 +4,11 @@ using Dynamo.Extensions;
 using Dynamo.Graph.Nodes;
 using Dynamo.ViewModels;
 using System.Collections.Generic;
-using System.Windows;
 using System.Collections.ObjectModel;
 using System.Linq;
 using Dynamo.Controls;
 using System.Windows.Controls;
+using System.Windows;
 
 namespace Monito
 {
@@ -124,21 +124,6 @@ namespace Monito
             set
             {
                 unhighlightGUID = value;
-            }
-        }
-
-        private string zoomGUID;
-        /// <summary>
-        /// The GUID of the node that was selected from the search results. Triggered by button click.
-        /// </summary>
-        public string ZoomGUID
-        {
-            get { return zoomGUID; }
-            set
-            {
-                zoomGUID = value;
-                var VMU = new ViewModelUtils(readyParams, viewModel, dynWindow);
-                VMU.ZoomToObject(value);
             }
         }
 
