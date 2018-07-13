@@ -5,11 +5,11 @@ using System.Windows.Controls;
 namespace Monito
 {
     /// <summary>
-    /// Interaction logic for PlayerInputsWindow.xaml
+    /// Interaction logic for FindUngrouped.xaml
     /// </summary>
-    public partial class PlayerInputsWindow : Window
+    public partial class FindUngroupedWindow : Window
     {
-        public PlayerInputsWindow()
+        public FindUngroupedWindow()
         {
             InitializeComponent();
         }
@@ -20,16 +20,6 @@ namespace Monito
             DynamoViewModel dynVM = Owner.DataContext as DynamoViewModel;
             var VMU = new ViewModelUtils(dynVM, Owner);
             VMU.ZoomToObject(guid);
-        }
-
-        void button_MouseEnter(object sender, RoutedEventArgs e)
-        {
-            highlightNode.Text = "" + ((Button)sender).Tag;
-        }
-
-        void button_MouseLeave(object sender, RoutedEventArgs e)
-        {
-            unhighlightNode.Text = "" + ((Button)sender).Tag;
         }
     }
 }
