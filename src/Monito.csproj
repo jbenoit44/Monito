@@ -174,7 +174,7 @@
     <Page Include="_Playground\PlaygroundWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
 	  <SubType>Designer</SubType>
-    </Page
+    </Page>
     <Page Include="_IsolateInPreview\IsolateInPreviewWindow.xaml">
 	  <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
