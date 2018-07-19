@@ -67,18 +67,6 @@ namespace Monito
             else { newZoom = lowestRatio; }
             var corrX = -objectCenterX * newZoom + dynWindow.ActualWidth / (newZoom / 2);
             var corrY = -objectCenterY * newZoom + dynWindow.ActualHeight / (newZoom / 2);
-            MessageBox.Show("Width: " + objectWidth.ToString() 
-                + "\nHeight: " + objectHeight.ToString() 
-                + "\nWindow width: " + dynWindow.ActualWidth.ToString() 
-                + "\nLibary width: " + viewModel.LibraryWidth.ToString() 
-                + "\nWindow height: " + dynWindow.ActualHeight.ToString()
-                + "\nObject X: " + objectCenterX.ToString()
-                + "\nObject Y: " + objectCenterY.ToString()
-                + "\nCurrent X: " + viewModel.CurrentSpace.X.ToString()
-                + "\nCurrent Y: " + viewModel.CurrentSpace.Y.ToString()
-                + "\nNew X: " + corrX.ToString()
-                + "\nNew Y: " + corrY.ToString()
-                + "\nZoom: " + newZoom.ToString());
             viewModel.CurrentSpace.Zoom = newZoom;
             viewModel.CurrentSpace.X = corrX;
             viewModel.CurrentSpace.Y = corrY;
